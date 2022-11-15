@@ -1,9 +1,13 @@
 import React,{useState} from 'react'
 import './App.css'
-import { useQuery } from 'react-query'
+import { useQuery,QueryClient} from 'react-query'
 import Post from './Post'
+import client from './react-query-client'
 function App() {
 	// let's go
+
+  
+
 const fetcher= url => fetch(url).then(res => res.json())
 const [state,setState]= useState(null);
 
@@ -20,13 +24,14 @@ const searchOne = (id) =>{
     setState(id)
 }
 if(state!= null)
-    return <p><Post id={state} goback={goBack} /></p>
+    return <Post id={state} goback={goBack} />
 
 	return (
 		<div className="App">
 			<h2>Blog posts</h2>
-            {posts.map((post)=>{
-                return <a href="#" onClick={()=>searchOne(post.id)}><p >{post.title}</p></a>
+            {posts.map((post,index)=>{
+                  const cachedPost=client.getQueryData(['post',post.id]);
+                return <div><p>{(cachedPost)?'( Visited ) ':''}<a href="#" onClick={()=>searchOne(post.id)}>{post.id}. {post.title}</a></p></div>
             })}
 		</div>
 	)
