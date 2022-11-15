@@ -5,7 +5,11 @@ import {useQuery} from 'react-query'
 function Post({id,goback}){
 const fetcher= url => fetch(url).then(res => res.json())
 
-const {isLoading, data:post} = useQuery(['post',id],() => fetcher(`https://jsonplaceholder.typicode.com/posts/${id}`))
+const {isLoading, data:post} = useQuery(['post',id],() => fetcher(`https://jsonplaceholder.typicode.com/posts/${id}`), {
+    // staleTime: 120000,
+     cacheTime: 120000,
+  
+  })
 
 if(isLoading)
 return <h1>Loading ...</h1>
